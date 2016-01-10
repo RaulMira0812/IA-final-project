@@ -2,10 +2,10 @@ import pygame
 import sys
 import Tile
 import Board
-import PathFinding
+from PathFinding import Node,PathFinding
 from pygame.locals import *
 
-def convertLTileToLNode(board):
+"""def convertLTileToLNode(board):
     lista = []
     for i in range(10):
         a = [0] * 20
@@ -30,6 +30,7 @@ def getNeighborsListNode(board,nodo):
                     if x - 1 + i != x or y - 1 + j != y:
                         lNeig.append(board[x - 1 + i][y - 1 + j])
     return lNeig
+"""
 
 def main():
     pygame.init()
@@ -57,12 +58,16 @@ def main():
     xFug = 3
     yFug = 3
       # cuadro = (xIni + xFug, yIni + yFug, 40, 15)  # iniX,iniY,distX,distY
-    lista = convertLTileToLNode(board)
-    lnei = getNeighborsListNode(lista, PathFinding.Node(pos=[1, 3]))
-    for i in range(len(lnei)):
-        print ((lnei[i].pos))
+    #lista = convertLTileToLNode(board)
+    #lnei = getNeighborsListNode(lista, PathFinding.Node(pos=[1, 3]))
+    #for i in range(len(lnei)):
+    #    print ((lnei[i].pos))
 
     ventanaP.blit(tablero, (0, 0))
+
+    print "/********************PathFinding***********************/"
+    path = PathFinding(board = board.board,initPos=[0,0],goalPos=[3,4])
+    print "El final path es ",path.goalPath
 
     while True:
         xIni = 0
@@ -82,5 +87,7 @@ def main():
         # cuadro = (50, 100, 40, 15)
         # pygame.draw.rect(ventanaP, color, cuadro)
         pygame.display.update()
+
+
 
 main()
