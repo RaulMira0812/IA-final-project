@@ -10,7 +10,7 @@ class Cop():
         self.ypos = y
         self.objective = None
         self.tile = None
-        self.imagen = pygame.image.load("resources\images\police.jpg")
+        self.imagen = pygame.image.load("resources\images\cop.jpg")
 
     def setXposition(self, x):
         self.xpos = x
@@ -25,12 +25,13 @@ class Cop():
         return self.tile
 
     def movePolice(self, tile):
-        if tile.type == 2:
+        if tile.type == 2:  # if next tile is a space (neither a wall nor a place)
             self.tile = tile
             self.xpos = tile.x
             self.ypos = tile.y
+            tile.occupied = 1  # The tile its been occupied by a police
         else:
-            print("No se puede mover a ese casillero")
+            print("You cant move there")
 
     def getBurglarTarget(self):
         return self.objective
