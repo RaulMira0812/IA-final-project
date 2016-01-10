@@ -4,7 +4,7 @@ global final_pos;
 final_pos = [0,0]
 # Each node represents the board tile for the algorithm 
 class Node:
-	def __init__(self,pos=[0,0],parent=None):
+	def __init__(self,pos=[0,0],parent=None,element = None):
 		#The tile position in the board
 		self.pos = pos
 		#Parent node
@@ -18,6 +18,8 @@ class Node:
 			self.g = self.parent.g + 1
 		#Heuristic Value
 		self.f = self.g +self.h
+		#Element to wrap
+		self.element = element
 
 	# The  Manhattan distance between 2 Nodes
 	def  manhattanDistance(self,point1,point2):
