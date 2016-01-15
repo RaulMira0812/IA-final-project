@@ -19,16 +19,44 @@ class Board():
             return 1
         return 0
 
-    def pintarCasilla(self, x, y,ventana,cuadro):
+    def isBurglarStartPoint(self, x, y):
+        if(x > 3 and x < 6 and y == 0):
+            return 1
+        if(x > 3 and x < 6 and y == 19):
+            return 1
+        if(y > 8 and y < 11 and x == 0):
+            return 1
+        if(y > 8 and y < 11 and x == 9):
+            return 1
+        return 0
+
+    def pintarCasilla(self, x, y, ventana, cuadro):
+        self.board[x][y].setCoord(cuadro)
         if self.board[x][y].getOccupied() != 0:
             pygame.draw.rect(ventana, self.board[x][y].getColor(), cuadro)
+        if self.board[x][y].getOccupied() == 0:
+            pygame.draw.rect(ventana, self.board[x][y].getColor(), cuadro)
+
+    def pintarFicha(self, x, y, ventana, cuadro):
+        if self.board[x][y].getOccupied() == 1:
+                ficha=pygame.image.load("police.png")
+                ficha = pygame.transform.scale(ficha, (self.board[x][y].cuadro[2], self.board[x][y].cuadro[3]))
+                ventana.blit(ficha,(self.board[x][y].cuadro[0], self.board[x][y].cuadro[1]))
+
+    def getMouseSelectedTile(self, pos):
+        for i in range(10):
+            for j in range(20):
+                if self.board[i][j].isMouseSelected(pos):
+                    return self.board[i][j]
+        return None
 
     def getNeighborsList(self,x,y):
         lNeig = []
         for i in range(3):
             for j in range(3):
                 if x - 1 + i >= 0 and x - 1 + i < 10 and y - 1 + j >= 0 and y - 1 + j < 20:
-                    if self.board[x - 1 + i][y - 1 + j].getType != 0:
+                    if self.board[x - 1 + i][y - 1 + j].getType() != 0:
                         if x - 1 + i != x or y - 1 + j != y:
                             lNeig.append(self.board[x - 1 + i][y - 1 + j])
                             #print ((str(x - 1 + i) + ":" + str(y - 1 + j)))
+        return lNeig

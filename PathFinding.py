@@ -1,6 +1,6 @@
 
 
-# Each node represents the board tile for the algorithm 
+# Each node represents the board tile for the algorithm
 class Node:
 	def __init__(self,pos=[0,0],element = None,parent=None,final_pos = [0,0]):
 		#The tile position in the board
@@ -35,11 +35,11 @@ class PathFinding:
 		  # The open list
 		self.open = []
 		# The close list
-		self.close = [] 
+		self.close = []
 		# Append the init node
-		self.close.append(self.initNode) 
-		# Get the init node neighbors 
-		self.open += self.getNeighborsList(self.initNode) 
+		self.close.append(self.initNode)
+		# Get the init node neighbors
+		self.open += self.getNeighborsList(self.initNode)
 
 		#self.is_the_goal_in_open_list()
 		while not self.is_the_goal_in_open_list():
@@ -116,7 +116,7 @@ class PathFinding:
 				new_y = y - 1 + j
 
 				if new_x >= 0 and new_x < 10 and new_y >= 0 and new_y < 20:
-					if self.board[new_x][new_y].getType != 0:
+					if self.board[new_x][new_y].getType() != 0:
 						if new_x != x or new_y != y:
 							newNode = Node(pos=[new_x,new_y],element=self.board[new_x][new_y],parent=node,final_pos=self.endNode.pos)
 							lNeig.append(newNode)
