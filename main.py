@@ -60,10 +60,8 @@ def main():
     M[0][19] = 1
     M[9][19] = 1
     """
+    board.loadBoard()
     #Se llena el tablero con Tile
-    for i in range(10):
-        for j in range(20):
-            board.getBoard()[i][j] = Tile.Tile(i, j)
 
     board.llenarCasillas()
     ventanaP = pygame.display.set_mode((420, 460))  # x,y (Tablero 330, 460)

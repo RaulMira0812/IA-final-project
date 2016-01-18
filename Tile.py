@@ -8,11 +8,12 @@ class Tile():
         self.occupied = 0
         self.x = x
         self.y = y
-        if (x < 9 and y == 3):
-            self.type = 0
-        else:
-            self.type = 2
+        #if (x < 5 and y == 3):
+        self.type = 2
+        #else:
+            #self.type = 2
         self.coin = None
+
 
     def setCoin(self, coin):
         self.coin = coin
