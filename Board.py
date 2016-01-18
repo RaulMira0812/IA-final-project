@@ -9,6 +9,7 @@ class Board():
         return self.board
 
     def llenarCasillas(self):
+
         for i in range(10):
             for j in range(20):
                 if self.copTile(i, j) == 1:
@@ -38,8 +39,11 @@ class Board():
             pygame.draw.rect(ventana, self.board[x][y].getColor(), cuadro)
 
     def pintarFicha(self, x, y, ventana, cuadro):
-        if self.board[x][y].getOccupied() == 1:
-                ficha=pygame.image.load("police.png")
+        if self.board[x][y].getOccupied() != 0:
+            # ficha=pygame.image.load("police.png")
+            if self.board[x][y].coin != None:
+                # print str(x)+":"+str(y)
+                ficha = self.board[x][y].coin.imagen
                 ficha = pygame.transform.scale(ficha, (self.board[x][y].cuadro[2], self.board[x][y].cuadro[3]))
                 ventana.blit(ficha,(self.board[x][y].cuadro[0], self.board[x][y].cuadro[1]))
 
@@ -49,6 +53,14 @@ class Board():
                 if self.board[i][j].isMouseSelected(pos):
                     return self.board[i][j]
         return None
+
+    def countByCoin(self, typeCoin):
+        conteo = 0
+        for i in range(10):
+            for j in range(20):
+                if self.board[i][j].occupied == typeCoin:
+                    conteo = conteo + 1
+        return conteo
 
     def getNeighborsList(self,x,y):
         lNeig = []

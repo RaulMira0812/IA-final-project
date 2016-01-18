@@ -5,12 +5,11 @@ import pygame
 class Cop():
 
     def __init__(self, x, y):
-        self.id = Cop.newid()
         self.xpos = x
         self.ypos = y
         self.objective = None
         self.tile = None
-        self.imagen = pygame.image.load("resources\images\cop.jpg")
+        self.imagen = pygame.image.load("police.png")
 
     def setXposition(self, x):
         self.xpos = x

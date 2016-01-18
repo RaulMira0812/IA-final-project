@@ -4,11 +4,11 @@ import pygame
 class Burglar():
 
     def __init__(self, x, y):
-        self.id = Burglar.newid()
+        # self.id = Burglar.newid()
         self.xpos = x
         self.ypos = y
         self.tile = None
-        self.imagen = pygame.image.load("resources\images\burglar.jpg")
+        self.imagen = pygame.image.load("burglar.jpg")
 
     def setXposition(self, x):
         self.xpos = x

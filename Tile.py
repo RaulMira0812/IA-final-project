@@ -1,3 +1,5 @@
+import Burglar
+import Cop
 
 class Tile():
     #tipos 0-Pared 1-Tienda 2-casillero
@@ -6,17 +8,25 @@ class Tile():
         self.occupied = 0
         self.x = x
         self.y = y
-        if (x < 4 and y == 3):
+        if (x < 9 and y == 3):
             self.type = 0
         else:
             self.type = 2
+        self.coin = None
+
+    def setCoin(self, coin):
+        self.coin = coin
 
     def setOccupied(self, typ):
         if self.type != 0:
             self.occupied = typ
+        if typ == 1:
+            self.coin=Cop.Cop(self.x, self.y)
+        if typ == 2:
+            self.coin=Burglar.Burglar(self.x, self.y)
 
     def setCoord(self,cuadro):
-        self.cuadro=cuadro
+        self.cuadro = cuadro
 
     def isMouseSelected(self,MousePos):
         if MousePos[0] > self.cuadro[0] and MousePos[0] < self.cuadro[0] + self.cuadro[2]:
@@ -41,7 +51,7 @@ class Tile():
             if self.isBurglarStartPoint(self.x, self.y) == 1:
                 return (200, 150, 125)
             else:
-                if self.type==0:
+                if self.type == 0:
                     return (100, 100, 100)
                 else:
                     return (200, 200, 200)
