@@ -41,6 +41,9 @@ def getNeighborsListNode(board,nodo):
 def main():
     #Inicio variables
     pygame.init()
+    globalTile = None
+    lastSelected = None
+    lAdy = None
     fps = pygame.time.Clock()
     dice = Dice.Dice()
     turno = -1  #cero si es policia, uno si es ladron
@@ -60,8 +63,10 @@ def main():
     M[0][19] = 1
     M[9][19] = 1
     """
-    board.loadBoard()
     #Se llena el tablero con Tile
+    for i in range(10):
+        for j in range(20):
+            board.getBoard()[i][j] = Tile.Tile(i, j)
 
     board.llenarCasillas()
     ventanaP = pygame.display.set_mode((420, 460))  # x,y (Tablero 330, 460)
@@ -99,8 +104,20 @@ def main():
             if evento.type == MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
                 selTile = board.getMouseSelectedTile(pos)
+                globalTile = selTile
+                if selTile is not None:
+                    if lAdy is not None and selTile.occupied==0:
+                        for i in range(len(lAdy)):
+                            if selTile is not lAdy[i]:
+                                lAdy[i].near = 0
+                            else:
+                                selTile.setOccupied(2)
+                        if selTile.occupied == 2:
+                            lastSelected.setOccupied(0)
+                            lastSelected.coin = None
+                        lAdy = None
                 if selTile is None:
-                    if dice.isDiceSelect(pos) and throwed == 0 and  turno == 1:
+                    if dice.isDiceSelect(pos) and throwed == 0 and turno == 1:
                         for abc in range(random.randrange(30, 60)):
                             pygame.display.update()
                             ventanaP.fill((0, 0, 0), (0, 0, 420, 460))
@@ -113,12 +130,17 @@ def main():
                         pygame.time.wait(666)
                         throwed = 1
                 else:
-                    print((str(selTile.x) + ":" + str(selTile.y)))
                     if countIniLadron < 4 and board.isBurglarStartPoint(selTile.x, selTile.y) and selTile.occupied == 0:
                         selTile.setOccupied(2)
                         countIniLadron = countIniLadron + 1
                         if countIniLadron == 4:
                             turno = 1
+
+
+        if turno == 1 and throwed == 1 and globalTile is not None:
+            if globalTile.occupied == 2:
+                lastSelected=globalTile
+                lAdy = board.setNeighborsList(globalTile.x, globalTile.y)
 
         for j in range(20):
             # print ((xIni + xFug + 40))

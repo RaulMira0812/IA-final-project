@@ -1,8 +1,4 @@
 import pygame
-import Tile
-
-#tipos 0-Pared 1-Tienda 2-casillero
-#Ocupado 0-Vacio 1-policia 2-Ladron
 
 class Board():
 
@@ -11,30 +7,6 @@ class Board():
 
     def getBoard(self):
         return self.board
-
-    def num(s):
-        try:
-            return int(s)
-        except ValueError:
-            return float(s)
-
-    def loadBoard(self):
-
-        for i in range(10):
-            for j in range(20):
-                    self.getBoard()[i][j] = Tile.Tile(i, j)
-                    self.getBoard()[i][j].type = 2
-
-        with open('board.txt') as f:
-           for line in f:
-               currentline = line.split(",") #have the row cols information
-               last = currentline[2].split("\n")[0] #third number indicates if is a wall or a place
-               posix = int(currentline[0])
-               posiy = int(currentline[1])
-               typet = int(last)
-               self.getBoard()[posix][posiy] = Tile.Tile(posix, posiy)
-               self.getBoard()[posix][posiy].type = typet
-
 
     def llenarCasillas(self):
         for i in range(10):
@@ -94,8 +66,21 @@ class Board():
         for i in range(3):
             for j in range(3):
                 if x - 1 + i >= 0 and x - 1 + i < 10 and y - 1 + j >= 0 and y - 1 + j < 20:
+                    if self.board[x][y].occupied == 1:
+                        if self.board[x - 1 + i][y - 1 + j].getType() != 0 or self.board[x - 1 + i][y - 1 + j].occupied == 2:
+                            if x - 1 + i != x or y - 1 + j != y:
+                                lNeig.append(self.board[x - 1 + i][y - 1 + j])
+                    elif self.board[x][y].occupied == 2:
+                        if self.board[x - 1 + i][y - 1 + j].getType() != 0 and self.board[x - 1 + i][y - 1 + j].occupied == 0:
+                            lNeig.append(self.board[x - 1 + i][y - 1 + j])
+        return lNeig
+    def setNeighborsList(self,x,y):
+        lNeig = []
+        for i in range(3):
+            for j in range(3):
+                if x - 1 + i >= 0 and x - 1 + i < 10 and y - 1 + j >= 0 and y - 1 + j < 20:
                     if self.board[x - 1 + i][y - 1 + j].getType() != 0:
                         if x - 1 + i != x or y - 1 + j != y:
+                            self.board[x - 1 + i][y - 1 + j].near = 1
                             lNeig.append(self.board[x - 1 + i][y - 1 + j])
-                            #print ((str(x - 1 + i) + ":" + str(y - 1 + j)))
         return lNeig
