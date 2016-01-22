@@ -106,16 +106,19 @@ def main():
                 selTile = board.getMouseSelectedTile(pos)
                 globalTile = selTile
                 if selTile is not None:
-                    if lAdy is not None and selTile.occupied==0:
-                        for i in range(len(lAdy)):
-                            if selTile is not lAdy[i]:
-                                lAdy[i].near = 0
-                            else:
-                                selTile.setOccupied(2)
-                        if selTile.occupied == 2:
-                            lastSelected.setOccupied(0)
-                            lastSelected.coin = None
-                        lAdy = None
+                    if selTile.occupied == 0:
+                        if lAdy is not None:
+                            for i in range(len(lAdy)):
+                                if selTile is not lAdy[i]:
+                                    lAdy[i].near = 0
+                                else:
+                                    selTile.setOccupied(2)
+                            if selTile.occupied == 2:
+                                lastSelected.setOccupied(0)
+                                lastSelected.coin = None
+                            lAdy = None
+                    else:
+                        board.cleanAllNear()
                 if selTile is None:
                     if dice.isDiceSelect(pos) and throwed == 0 and turno == 1:
                         for abc in range(random.randrange(30, 60)):

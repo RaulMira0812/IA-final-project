@@ -4,6 +4,7 @@ import Cop
 class Tile():
     #tipos 0-Pared 1-Tienda 2-casillero
     #Ocupado 0-Vacio 1-policia 2-Ladron
+    # near inidca verdadero o falso para cercania
     def __init__(self, x, y):
         self.occupied = 0
         self.x = x

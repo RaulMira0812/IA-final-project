@@ -14,6 +14,11 @@ class Board():
                 if self.copTile(i, j) == 1:
                     self.board[i][j].setOccupied(1)
 
+    def cleanAllNear(self):
+        for i in range(10):
+            for j in range(20):
+                self.board[i][j].near = 0
+
     def copTile(self, x, y):
         if(x == 0 and y == 0 or x == 9 and y == 0 or x == 0 and y == 19 or x == 9 and y == 19):
             return 1
