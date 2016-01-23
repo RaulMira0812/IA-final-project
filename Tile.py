@@ -9,10 +9,10 @@ class Tile():
         self.occupied = 0
         self.x = x
         self.y = y
-        if (x < 9 and y == 3):
-            self.type = 0
-        else:
-            self.type = 2
+        #if (x < 9 and y == 3):
+            #self.type = 0
+        #else:
+        self.type = 2
         self.coin = None
         self.near = 0
 
@@ -43,8 +43,8 @@ class Tile():
         return self.type
 
     def getColor(self):
-        if(self.x == 3 and self.y == 4):
-            return (0, 0, 0)
+        #if(self.x == 3 and self.y == 4):
+            #return (0, 0, 0)
         if(self.near == 1):
             return (100, 100, 100)
         if(self.occupied == 2):
@@ -57,6 +57,8 @@ class Tile():
             else:
                 if self.type == 0:
                     return (200, 50, 50)
+                elif self.type == 1:
+                    return (70, 220, 60)
                 else:
                     return (200, 200, 200)
 

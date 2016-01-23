@@ -1,4 +1,5 @@
 import pygame
+import Tile
 
 class Board():
 
@@ -7,6 +8,23 @@ class Board():
 
     def getBoard(self):
         return self.board
+
+    def loadBoard(self):
+
+        for i in range(10):
+            for j in range(20):
+                    self.getBoard()[i][j] = Tile.Tile(i, j)
+                    self.getBoard()[i][j].type = 2
+
+        with open('board.txt') as f:
+           for line in f:
+               currentline = line.split(",") #have the row cols information
+               last = currentline[2].split("\n")[0] #third number indicates if is a wall or a place
+               posix = int(currentline[0])
+               posiy = int(currentline[1])
+               typet = int(last)
+               self.getBoard()[posix][posiy] = Tile.Tile(posix, posiy)
+               self.getBoard()[posix][posiy].type = typet
 
     def llenarCasillas(self):
         for i in range(10):
