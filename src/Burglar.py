@@ -8,7 +8,14 @@ class Burglar():
         self.xpos = x
         self.ypos = y
         self.tile = None
+        self.leftMov = 3
         self.imagen = pygame.image.load("burglar.jpg")
+
+    def resetMoves(self):
+        self.leftMov = 3
+
+    def countDownMoves(self):
+        self.leftMov= self.leftMov - 1
 
     def setXposition(self, x):
         self.xpos = x

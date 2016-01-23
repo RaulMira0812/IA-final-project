@@ -51,7 +51,8 @@ def main():
     fuente1 = pygame.font.SysFont(None, 20, False, True)
     textPolice = fuente1.render("Cops: ", 0, (0, 255, 0))
     textBurglar = fuente1.render("Burglars: ", 0, (0, 255, 0))
-    textDice = fuente1.render("Steps left:", 0, (0, 255, 0))
+    textPlaces = fuente1.render("No Stoled: ", 0, (0, 255, 0))
+    textDice = fuente1.render("Steps left: ", 0, (0, 255, 0))
     #creacion del tablero 10 * 20
     board = Board.Board([])
     for i in range(10):
@@ -103,14 +104,23 @@ def main():
                 pos = pygame.mouse.get_pos()
                 selTile = board.getMouseSelectedTile(pos)
                 globalTile = selTile
-                if selTile is not None:
+                if selTile is not None and selTile.stoled == 0:
                     if selTile.occupied == 0:
                         if lAdy is not None:
                             for i in range(len(lAdy)):
                                 if selTile is not lAdy[i]:
                                     lAdy[i].near = 0
                                 else:
-                                    selTile.setOccupied(2)
+                                    if lastSelected.coin.leftMov > 0:
+                                        selTile.setOccupied(2)
+                                        selTile.coin = lastSelected.coin
+                                        if selTile.type == 1 and selTile.stoled == 0:
+                                            selTile.stoled = 1;
+                                            selTile.coin.leftMov = 0
+                                        else:
+                                            selTile.coin.countDownMoves()
+                                    else:
+                                        board.cleanAllNear()
                             if selTile.occupied == 2:
                                 numDado = numDado - 1
                                 lastSelected.setOccupied(0)
@@ -141,17 +151,35 @@ def main():
 
 
         if turno == 1 and throwed == 1 and globalTile is not None:
-            if numDado != 0:
-                if globalTile.occupied == 2:
-                    lastSelected = globalTile
-                    lAdy = board.setNeighborsList(globalTile.x, globalTile.y)
-            else:
+            if board.noMovesPermissionsFor(2) == 1:
+                board.resetMovesByCoin(2)
                 turno = 0
                 throwed = 0
+            else:
+                if numDado != 0:
+                    if globalTile.occupied == 2:
+                        if globalTile.coin.leftMov != 0:
+                            lastSelected = globalTile
+                            lAdy = board.setNeighborsList(globalTile.x, globalTile.y)
+                        else:
+                            board.cleanAllNear()
+                else:
+                    board.resetMovesByCoin(2)
+                    turno = 0
+                    throwed = 0
 
         if turno == 0:
-            #poner aqui todo lo de policia, cuando termine turno policia se hace el turno 1 es decir, se devuelve
-            turno = 1
+            moved = 0
+            if throwed == 0:
+                numDado = throwDice()
+                throwed = 1
+            else:
+                polices = board.selectAllPolices()
+                for i in range(len(polices)):
+                    polices[i].coin.setListMov(board.getNeighborsList(polices[i].x, polices[i].y))
+                #poner aqui todo lo de policia, cuando termine turno policia se hace el turno 1 es decir, se devuelve
+                turno = 1
+                throwed = 0
             board.cleanAllNear()
 
         for j in range(20):
@@ -174,13 +202,24 @@ def main():
         # pygame.draw.rect(ventanaP, color, cuadro)
         textNumPolic = fuente1.render(str(board.countByCoin(1)), 0, (0, 255, 0))
         textNumBurgl = fuente1.render(str(board.countByCoin(2)), 0, (0, 255, 0))
+        textNumPlaces = fuente1.render(str(board.countNoStoled()), 0, (0, 255, 0))
         textNumDice = fuente1.render(str(numDado), 0, (0, 255, 0))
         ventanaP.blit(textPolice, (330, 0))
         ventanaP.blit(textNumPolic, (370, 20))
         ventanaP.blit(textBurglar, (330, 40))
         ventanaP.blit(textNumBurgl, (370, 60))
-        ventanaP.blit(textDice, (330, 80))
-        ventanaP.blit(textNumDice, (370, 100))
+        ventanaP.blit(textPlaces, (330, 80))
+        ventanaP.blit(textNumPlaces, (370, 100))
+        ventanaP.blit(textDice, (330, 120))
+        ventanaP.blit(textNumDice, (370, 140))
         pygame.display.update()
         fps.tick(100)
+        if (board.countByCoin(2) == 0 or board.countNoStoled() == 0) and countIniLadron != 0:
+            break
+    i = 0
+    while(i < 10):
+        ventanaP.fill((0, 0, 0), (0, 0, 420, 460))
+        print ("ganador")
+        pygame.time.wait(100)
+        i = i + 1
 main()

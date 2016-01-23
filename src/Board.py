@@ -10,7 +10,6 @@ class Board():
         return self.board
 
     def loadBoard(self):
-
         for i in range(10):
             for j in range(20):
                     self.getBoard()[i][j] = Tile.Tile(i, j)
@@ -84,6 +83,31 @@ class Board():
                     conteo = conteo + 1
         return conteo
 
+    def countNoStoled(self):
+        conteo = 0
+        for i in range(10):
+            for j in range(20):
+                if self.board[i][j].type == 1 and self.board[i][j].stoled == 0:
+                    conteo = conteo + 1
+        return conteo
+
+    def noMovesPermissionsFor(self, typeCoin):
+        count = 0
+        for i in range(10):
+            for j in range(20):
+                if self.board[i][j].occupied == typeCoin:
+                    if self.board[i][j].coin.leftMov != 0:
+                        count = count + 1
+        if count == 0:
+            return 1
+        return 0
+
+    def resetMovesByCoin(self, typeCoin):
+        for i in range(10):
+            for j in range(20):
+                if self.board[i][j].occupied == typeCoin:
+                    self.board[i][j].coin.resetMoves()
+
     def getNeighborsList(self,x,y):
         lNeig = []
         for i in range(3):
@@ -102,8 +126,16 @@ class Board():
         for i in range(3):
             for j in range(3):
                 if x - 1 + i >= 0 and x - 1 + i < 10 and y - 1 + j >= 0 and y - 1 + j < 20:
-                    if self.board[x - 1 + i][y - 1 + j].getType() != 0:
+                    if self.board[x - 1 + i][y - 1 + j].getType() != 0 and self.board[x - 1 + i][y - 1 + j].stoled == 0:
                         if x - 1 + i != x or y - 1 + j != y:
                             self.board[x - 1 + i][y - 1 + j].near = 1
                             lNeig.append(self.board[x - 1 + i][y - 1 + j])
         return lNeig
+
+    def selectAllPolices(self):
+        lPoli = []
+        for i in range(10):
+            for j in range(20):
+                if self.board[i][j].occupied == 1:
+                    lPoli.append(self.board[i][j])
+        return lPoli

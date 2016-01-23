@@ -15,6 +15,7 @@ class Tile():
         self.type = 2
         self.coin = None
         self.near = 0
+        self.stoled = 0 #Si esta robado es 1
 
     def setCoin(self, coin):
         self.coin = coin
@@ -58,7 +59,10 @@ class Tile():
                 if self.type == 0:
                     return (200, 50, 50)
                 elif self.type == 1:
-                    return (70, 220, 60)
+                    if self.stoled == 0:
+                        return (70, 220, 60)
+                    else:
+                        return (50, 20, 255)
                 else:
                     return (200, 200, 200)
 

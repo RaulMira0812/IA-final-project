@@ -1,6 +1,6 @@
 #import Burglar
 import pygame
-
+import PathFinding
 
 class Cop():
 
@@ -9,7 +9,12 @@ class Cop():
         self.ypos = y
         self.objective = None
         self.tile = None
+        self.listMov = None
+        self.countListMov = None
         self.imagen = pygame.image.load("police.png")
+
+    def setListMov(self,listmov):
+        self.listMov = listmov
 
     def setXposition(self, x):
         self.xpos = x
