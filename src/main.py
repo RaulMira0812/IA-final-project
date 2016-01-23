@@ -1,6 +1,5 @@
 import pygame
 import sys
-import Tile
 import Board
 import random
 import Dice
@@ -48,9 +47,11 @@ def main():
     dice = Dice.Dice()
     turno = -1  #cero si es policia, uno si es ladron
     throwed = 0
+    numDado = 0
     fuente1 = pygame.font.SysFont(None, 20, False, True)
-    textPolice = fuente1.render("Policias: ", 0, (0, 255, 0))
-    textBurglar = fuente1.render("Ladrones: ", 0, (0, 255, 0))
+    textPolice = fuente1.render("Cops: ", 0, (0, 255, 0))
+    textBurglar = fuente1.render("Burglars: ", 0, (0, 255, 0))
+    textDice = fuente1.render("Steps left:", 0, (0, 255, 0))
     #creacion del tablero 10 * 20
     board = Board.Board([])
     for i in range(10):
@@ -111,6 +112,7 @@ def main():
                                 else:
                                     selTile.setOccupied(2)
                             if selTile.occupied == 2:
+                                numDado = numDado - 1
                                 lastSelected.setOccupied(0)
                                 lastSelected.coin = None
                             lAdy = None
@@ -129,6 +131,7 @@ def main():
                         dice.drawDice(ventanaP, (170, 200, 90, 90))
                         pygame.time.wait(666)
                         throwed = 1
+                        numDado = dice.selectDice + 1
                 else:
                     if countIniLadron < 4 and board.isBurglarStartPoint(selTile.x, selTile.y) and selTile.occupied == 0:
                         selTile.setOccupied(2)
@@ -138,9 +141,18 @@ def main():
 
 
         if turno == 1 and throwed == 1 and globalTile is not None:
-            if globalTile.occupied == 2:
-                lastSelected=globalTile
-                lAdy = board.setNeighborsList(globalTile.x, globalTile.y)
+            if numDado != 0:
+                if globalTile.occupied == 2:
+                    lastSelected = globalTile
+                    lAdy = board.setNeighborsList(globalTile.x, globalTile.y)
+            else:
+                turno = 0
+                throwed = 0
+
+        if turno == 0:
+            #poner aqui todo lo de policia, cuando termine turno policia se hace el turno 1 es decir, se devuelve
+            turno = 1
+            board.cleanAllNear()
 
         for j in range(20):
             # print ((xIni + xFug + 40))
@@ -162,10 +174,13 @@ def main():
         # pygame.draw.rect(ventanaP, color, cuadro)
         textNumPolic = fuente1.render(str(board.countByCoin(1)), 0, (0, 255, 0))
         textNumBurgl = fuente1.render(str(board.countByCoin(2)), 0, (0, 255, 0))
+        textNumDice = fuente1.render(str(numDado), 0, (0, 255, 0))
         ventanaP.blit(textPolice, (330, 0))
         ventanaP.blit(textNumPolic, (370, 20))
         ventanaP.blit(textBurglar, (330, 40))
         ventanaP.blit(textNumBurgl, (370, 60))
+        ventanaP.blit(textDice, (330, 80))
+        ventanaP.blit(textNumDice, (370, 100))
         pygame.display.update()
         fps.tick(100)
 main()
