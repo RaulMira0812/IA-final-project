@@ -1,5 +1,6 @@
 import pygame
 import Tile
+from PathFinding import Node,PathFinding
 
 class Board():
 
@@ -121,6 +122,7 @@ class Board():
                         if self.board[x - 1 + i][y - 1 + j].getType() != 0 and self.board[x - 1 + i][y - 1 + j].occupied == 0:
                             lNeig.append(self.board[x - 1 + i][y - 1 + j])
         return lNeig
+
     def setNeighborsList(self,x,y):
         lNeig = []
         for i in range(3):
@@ -137,7 +139,8 @@ class Board():
         for i in range(10):
             for j in range(20):
                 if self.board[i][j].occupied == 1:
-                    lPoli.append(self.board[i][j])
+                    if self.board[i][j].coin.leftMov != 0:
+                        lPoli.append(self.board[i][j])
         return lPoli
 
     def selectAllBurglars(self):
@@ -147,3 +150,18 @@ class Board():
                 if self.board[i][j].occupied == 2:
                     lBurglar.append(self.board[i][j])
         return lBurglar
+
+    def getNearBurglar(self, x, y):
+        burglars = self.selectAllBurglars()
+        tmp = 0
+        lenght = 100
+        for j in range(len(burglars)):
+            if x == burglars[j].x and y == burglars[j].y:
+                return burglars[j]
+            else:
+                pathb = PathFinding(board = self.board, initPos = [x, y], goalPos = [burglars[j].x, burglars[j].y])
+                #print(("To burglar " + str(burglars[j].x) + "," + str(burglars[j].y) + " from cop " + str(x) + "," + str(y) + ":", pathb.goalPath))
+                if lenght > len(pathb.goalPath):
+                    lenght = len(pathb.goalPath)
+                    tmp = j
+        return burglars[tmp]

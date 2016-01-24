@@ -10,33 +10,6 @@ def throwDice():
     return random.randrange(1, 7)
 
 
-"""def convertLTileToLNode(board):
-    lista = []
-    for i in range(10):
-        a = [0] * 20
-        lista.append(a)
-
-    for i in range(10):
-        for j in range(20):
-            lista[i][j]=convertTiletoNode(board.getBoard()[i][j])
-    return lista
-
-def convertTiletoNode(tile):
-    return PathFinding.Node(pos=[tile.x, tile.y], element=tile)
-
-def getNeighborsListNode(board,nodo):
-    lNeig = []
-    x = nodo.pos[0]
-    y = nodo.pos[1]
-    for i in range(3):
-        for j in range(3):
-            if x - 1 + i >= 0 and x - 1 + i < 10 and y - 1 + j >= 0 and y - 1 + j < 20:
-                if board[x - 1 + i][y - 1 + j].element.getType() != 0:
-                    if x - 1 + i != x or y - 1 + j != y:
-                        lNeig.append(board[x - 1 + i][y - 1 + j])
-    return lNeig
-"""
-
 def main():
     #Initialize variables
     pygame.init()
@@ -59,12 +32,6 @@ def main():
         a = [0] * 20
         board.getBoard().append(a)
 
-    """
-    M[0][0] = 1
-    M[9][0] = 1
-    M[0][19] = 1
-    M[9][19] = 1
-    """
     board.loadBoard()
 
     board.llenarCasillas()
@@ -82,11 +49,11 @@ def main():
     #    print ((lnei[i].pos))
 
       # ventanaP.blit(tablero, (0, 0))
-    print ("/********************PathFinding***********************/")
-    vecinos=board.getNeighborsList(0, 0)
-    for i in range(len(vecinos)):
-        path = PathFinding(board=board.board, initPos=[vecinos[i].x, vecinos[i].y], goalPos=[3, 4])
-        print (("The final path from [0, 0] through " + str(vecinos[i].x) + " is :" + str(vecinos[i].y), path.goalPath))
+    #print ("/********************PathFinding***********************/")
+    #vecinos=board.getNeighborsList(0, 0)
+    #for i in range(len(vecinos)):
+        #path = PathFinding(board=board.board, initPos=[vecinos[i].x, vecinos[i].y], goalPos=[3, 4])
+        #print (("The final path from [0, 0] through " + str(vecinos[i].x) + " is :" + str(vecinos[i].y), path.goalPath))
 
     print ("Choose 4 tiles for starting the game")
     countIniLadron = 0
@@ -190,28 +157,42 @@ def main():
 
 
         if turno == 0: #if the turn if for the PC (cop)
-            print "cop turn"
+            #print "cop turn"
             moved = 0
             if throwed == 0: #if the dice hasnt been throwed
                 numDado = throwDice() #throw it
                 throwed = 1
+                print numDado
             else:
-                cops = board.selectAllPolices() #get the list of polices in the board
-                listburglars = board.selectAllBurglars() #get the list of burglars
-                for i in range(len(cops)): #for each cop on the board
-                    #cops[i].coin.setListMov(board.getNeighborsList(cops[i].x, cops[i].y)) #set the neighbors
-                    #lneighCops = cops[i].coin.getListMov()
-                    for j in range(len(listburglars)):
-                        pathb = PathFinding(board = board.board, initPos = [cops[i].x, cops[i].y], goalPos = [listburglars[j].x, listburglars[j].y])
-                        print(("To burglar " + str(listburglars[j].x) + "," + str(listburglars[j].y) + " from cop " + str(cops[i].x) + "," + str(cops[i].y) + ":", pathb.goalPath))
-
-                #poner aqui todo lo de policia, cuando termine turno policia se hace el turno 1 es decir, se devuelve
-                turno = 1
-                throwed = 0
+                tmp = 0
+                tmp2 = 0
+                tam = 100
+                cops = board.selectAllPolices() #get the list of polices in the board com movimientos disponibles
+                if len(cops) != 0:
+                    for i in range(len(cops)): #for each cop on the board
+                        cops[i].coin.setListMov(board.getNeighborsList(cops[i].x, cops[i].y), board) #set the neighbors
+                    for i in range(len(cops)): # Se selecciona al mejor policia para realizar movimiento
+                        for j in range(len(cops[i].coin.countListMov)):
+                            if tam > cops[i].coin.countListMov[j]:
+                                tmp = i
+                                tmp2 = j
+                                tam = cops[i].coin.countListMov[j]
+                    # print "SelectedCop:"+str(cops[tmp].x)+":"+str(cops[tmp].y)
+                    selTile = cops[tmp].coin.listMov[tmp2]
+                    selTile.setOccupied(1) #then move and set occupied by a burglar
+                    selTile.coin = cops[tmp].coin
+                    selTile.coin.countDownMoves()
+                    cops[tmp].setOccupied(0)
+                    cops[tmp].coin = None
+                    numDado = numDado - 1
+                    pygame.time.wait(100)
+                else:
+                    numDado = 0
+                if numDado == 0: #Si policia usa todos sus movimientos, termina su turno o no tiene movimientos posibles
+                    turno = 1
+                    throwed = 0
+                    board.resetMovesByCoin(1)
             board.cleanAllNear()
-
-
-
 
         for j in range(20):
             # print ((xIni + xFug + 40))

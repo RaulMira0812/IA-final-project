@@ -1,6 +1,6 @@
 #import Burglar
 import pygame
-import PathFinding
+from PathFinding import Node,PathFinding
 
 class Cop():
 
@@ -9,12 +9,26 @@ class Cop():
         self.ypos = y
         self.objective = None
         self.tile = None
+        self.leftMov = 3
         self.listMov = None
         self.countListMov = None
         self.imagen = pygame.image.load("police.png")
 
-    def setListMov(self,listmov):
+    def setListMov(self, listmov, board):
+        self.countListMov = []
         self.listMov = listmov
+        if self.listMov is not None:
+            for i in range(len(self.listMov)):
+                iniX = self.listMov[i].x
+                iniY = self.listMov[i].y
+                #print str(iniX)+":"+str(iniY)
+                goalPoint = board.getNearBurglar(iniX, iniY)
+                #print "burglar "+str(goalPoint.x)+":"+str(goalPoint.y)
+                if iniX == goalPoint.x and iniY == goalPoint.y:
+                    self.countListMov.append(1)
+                else:
+                    path = PathFinding(board=board.board, initPos=[iniX, iniY], goalPos=[goalPoint.x, goalPoint.y])
+                    self.countListMov.append(len(path.goalPath) + 1)
 
     def getListMov(self):
         return self.listMov
@@ -48,3 +62,9 @@ class Cop():
 
     def getPlayerState(self):
         return self.state
+
+    def countDownMoves(self):
+        self.leftMov = self.leftMov - 1
+
+    def resetMoves(self):
+        self.leftMov = 3
