@@ -178,14 +178,18 @@ def main():
                                 tmp2 = j
                                 tam = cops[i].coin.countListMov[j]
                     # print "SelectedCop:"+str(cops[tmp].x)+":"+str(cops[tmp].y)
+                    #selecciona casilla a ubicarse y le entrega el coin
                     selTile = cops[tmp].coin.listMov[tmp2]
-                    selTile.setOccupied(1) #then move and set occupied by a burglar
+                    if selTile.occupied == 2: #Si la posicion que tomara esta ocupada por ladron
+                        print "Atrapado"
+                        cops[tmp].coin.leftMov = 1 #Indica que le queda un movimiento (El que realizara)
+                    selTile.setOccupied(1) #then move and set occupied by a cop
                     selTile.coin = cops[tmp].coin
                     selTile.coin.countDownMoves()
                     cops[tmp].setOccupied(0)
                     cops[tmp].coin = None
                     numDado = numDado - 1
-                    pygame.time.wait(100)
+                    pygame.time.wait(666)
                 else:
                     numDado = 0
                 if numDado == 0: #Si policia usa todos sus movimientos, termina su turno o no tiene movimientos posibles
@@ -230,8 +234,19 @@ def main():
             break
     i = 0
     while(i < 10):
+        pygame.display.update()
         ventanaP.fill((0, 0, 0), (0, 0, 420, 460))
-        print ("ganador")
-        pygame.time.wait(100)
+        fuente1 = pygame.font.SysFont(None, 30, False, True)
+        textGanador = fuente1.render("Ganador", 0, (0, 255, 0))
+        ventanaP.blit(textGanador, (0, 0))
+        if board.countByCoin(2) == 0:
+            textWho = fuente1.render("Policia", 0, (0, 255, 0))
+        else:
+            textWho = fuente1.render("Ladron", 0, (0, 255, 0))
+        ventanaP.blit(textWho, (100, 60))
+        textCount = fuente1.render("Faltaron por robar: "+str(board.countNoStoled())+" Tiendas", 0, (0, 255, 0))
+        ventanaP.blit(textCount, (60,100))
+        pygame.display.update()
+        pygame.time.wait(666)
         i = i + 1
 main()

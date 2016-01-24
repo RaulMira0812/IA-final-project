@@ -9,7 +9,7 @@ class Cop():
         self.ypos = y
         self.objective = None
         self.tile = None
-        self.leftMov = 3
+        self.leftMov = 2
         self.listMov = None
         self.countListMov = None
         self.imagen = pygame.image.load("police.png")
@@ -67,4 +67,4 @@ class Cop():
         self.leftMov = self.leftMov - 1
 
     def resetMoves(self):
-        self.leftMov = 3
+        self.leftMov = 2
