@@ -115,7 +115,7 @@ class Board():
             for j in range(3):
                 if x - 1 + i >= 0 and x - 1 + i < 10 and y - 1 + j >= 0 and y - 1 + j < 20:
                     if self.board[x][y].occupied == 1:
-                        if self.board[x - 1 + i][y - 1 + j].getType() != 0 or self.board[x - 1 + i][y - 1 + j].occupied == 2:
+                        if self.board[x - 1 + i][y - 1 + j].getType() != 0 and self.board[x - 1 + i][y - 1 + j].occupied != 1:
                             if x - 1 + i != x or y - 1 + j != y:
                                 lNeig.append(self.board[x - 1 + i][y - 1 + j])
                     elif self.board[x][y].occupied == 2:

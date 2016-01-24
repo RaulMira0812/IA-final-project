@@ -115,7 +115,7 @@ class PathFinding:
 				new_x = x - 1 + i
 				new_y = y - 1 + j
 				if new_x >= 0 and new_x < 10 and new_y >= 0 and new_y < 20:
-					if self.board[new_x][new_y].getType() != 0 or (self.board[new_x][new_y].getType() == 1 and self.board[new_x][new_y].getOccupied != 0):
+					if self.board[new_x][new_y].occupied != 1 and (self.board[new_x][new_y].getType() != 0 or (self.board[new_x][new_y].getType() == 1 and self.board[new_x][new_y].getOccupied == 2)):
 						if new_x != x or new_y != y:
 							newNode = Node(pos=[new_x,new_y],element=self.board[new_x][new_y],parent=node,final_pos=self.endNode.pos)
 							lNeig.append(newNode)
