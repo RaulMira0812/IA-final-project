@@ -96,11 +96,11 @@ class Board():
         for i in range(10):
             for j in range(20):
                 if self.board[i][j].occupied == typeCoin:
-                    if self.board[i][j].coin.leftMov != 0:
-                        count = count + 1
-        if count == 0:
+                    if self.board[i][j].coin.leftMov != 0: #if the coin have movements left
+                        count = count + 1 #count how many coins have movements left
+        if count == 0: #if all the coins have no movements left, answer YES noMovesPermisionForCoin
             return 1
-        return 0
+        return 0 #Otherwise answer NO there are still coins hace movements left
 
     def resetMovesByCoin(self, typeCoin):
         for i in range(10):
@@ -139,3 +139,11 @@ class Board():
                 if self.board[i][j].occupied == 1:
                     lPoli.append(self.board[i][j])
         return lPoli
+
+    def selectAllBurglars(self):
+        lBurglar = []
+        for i in range(10):
+            for j in range(20):
+                if self.board[i][j].occupied == 2:
+                    lBurglar.append(self.board[i][j])
+        return lBurglar

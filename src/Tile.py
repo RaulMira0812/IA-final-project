@@ -2,20 +2,17 @@ import Burglar
 import Cop
 
 class Tile():
-    #tipos 0-Pared 1-Tienda 2-casillero
-    #Ocupado 0-Vacio 1-policia 2-Ladron
-    # near inidca verdadero o falso para cercania
+    #types 0-Wall 1-Store 2-Regular
+    #Occupied 0-Empty 1-Cop 2-Burglar
+    # near indicates if the tile is a neighbor tile
     def __init__(self, x, y):
         self.occupied = 0
         self.x = x
         self.y = y
-        #if (x < 9 and y == 3):
-            #self.type = 0
-        #else:
         self.type = 2
         self.coin = None
         self.near = 0
-        self.stoled = 0 #Si esta robado es 1
+        self.stoled = 0 #0-not stolen/1-stolen
 
     def setCoin(self, coin):
         self.coin = coin
@@ -46,8 +43,8 @@ class Tile():
     def getColor(self):
         #if(self.x == 3 and self.y == 4):
             #return (0, 0, 0)
-        if(self.near == 1):
-            return (100, 100, 100)
+        if(self.near == 1): #if the tile is a neighbor
+            return (200, 200, 000) #paint it almost yellow
         if(self.occupied == 2):
             return (200, 25, 10)
         if(self.occupied == 1):

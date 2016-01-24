@@ -16,6 +16,9 @@ class Cop():
     def setListMov(self,listmov):
         self.listMov = listmov
 
+    def getListMov(self):
+        return self.listMov
+
     def setXposition(self, x):
         self.xpos = x
 
