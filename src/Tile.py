@@ -44,11 +44,11 @@ class Tile():
         #if(self.x == 3 and self.y == 4):
             #return (0, 0, 0)
         if(self.near == 1): #if the tile is a neighbor
-            return (200, 200, 000) #paint it almost yellow
+            return (200, 200, 000)
         if(self.occupied == 2):
-            return (200, 25, 10)
+            return (200, 200, 200)
         if(self.occupied == 1):
-            return (25, 10, 200)
+            return (200, 200, 200)
         if(self.occupied == 0):
             if self.isBurglarStartPoint(self.x, self.y) == 1:
                 return (200, 150, 125)

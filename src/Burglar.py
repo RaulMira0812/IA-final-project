@@ -9,7 +9,7 @@ class Burglar():
         self.ypos = y
         self.tile = None
         self.leftMov = 3
-        self.imagen = pygame.image.load("burglar.jpg")
+        self.imagen = pygame.image.load("burglar.png")
 
     def resetMoves(self):
         self.leftMov = 3

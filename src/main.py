@@ -24,14 +24,14 @@ def main():
     turno = -1  #zero if cop, one if burglar
     throwed = 0
     numDado = 0
-    pequeno=0
+    pequeno=1
     levels=[]
     white = (255, 64, 64)
-    fuente1 = pygame.font.SysFont(None, 20, False, True)
+    fuente1 = pygame.font.SysFont(None, 22, False, True)
     textPolice = fuente1.render("Cops: ", 0, (0, 255, 0))
     textBurglar = fuente1.render("Burglars: ", 0, (0, 255, 0))
-    textPlaces = fuente1.render("No Stoled: ", 0, (0, 255, 0))
-    textDice = fuente1.render("Steps left: ", 0, (0, 255, 0))
+    textPlaces = fuente1.render("Stores: ", 0, (0, 255, 0))
+    textDice = fuente1.render("Steps: ", 0, (0, 255, 0))
     #creation of the board 10x20
     board = Board.Board([])
     for i in range(10):
@@ -43,7 +43,7 @@ def main():
     board.llenarCasillas()
 
     #screen = pygame.display.set_mode((600,600))
-    ventanaP = pygame.display.set_mode((1300, 460))  # x,y (Tablero 330, 460)
+    ventanaP = pygame.display.set_mode((420, 460))  # x,y (Tablero 330, 460)
       # tablero = pygame.image.load("mena.jpg")
     pygame.display.set_caption("Cops and Burglars")
     xIni = 0
@@ -201,19 +201,13 @@ def main():
                                 tmp = i
                                 tmp2 = j
                                 tam = cops[i].coin.countListMov[j]
-
-
-                                #ventanaP.blit(img, (400,460))
-                                #pygame.display.update()
-                                #fps.tick(100)
-                                #pygame.display.flip()
-
-                        root = "["+str(cops[i].x)+","+str(cops[i].y)+"]"
+                        gvalues = cops[i].coin.countListMov
+                        print cops[i].coin.countListMov[j]
+                        root = str(cops[i].x+1)+","+str(cops[i].y+1)
                         listnei=board.getNeighborsList(cops[i].x, cops[i].y)
 
                         for k in range(len(listnei)):
-                            levels.append("["+str(listnei[k].x)+","+str(listnei[k].y)+"]")
-                            #levels[k] =
+                            levels.append(str(listnei[k].x+1)+","+str(listnei[k].y+1)+"/"+"h:"+str(gvalues[k]))
                         print "--------------------------------------------"
 
                         #only for veryfing the printing
@@ -223,29 +217,26 @@ def main():
 
                         filename = "example"+str(i)+".png" # ensure filename is correct
 
+                        print filename
                         a = Graph.CustomTree(root = root,leafs=levels, filen=filename)
                         #a.addLevels(root = root,leafs=levels)
                         a.draw()
 
-                        print len(levels)
-                        print levels
                         for t in range(len(levels)):
-                            print "hola"
                             levels.pop(0)
-                            print levels
-
-
-
 
                         img=pygame.image.load("example0.png")
                         img = pygame.transform.scale(img, (400,200))
                         ventanaP.blit(img, (420, 20))
+
                         img=pygame.image.load("example1.png")
                         img = pygame.transform.scale(img, (400,200))
                         ventanaP.blit(img, (420, 240))
+
                         img=pygame.image.load("example2.png")
                         img = pygame.transform.scale(img, (400,200))
                         ventanaP.blit(img, (840, 20))
+
                         img=pygame.image.load("example3.png")
                         img = pygame.transform.scale(img, (400,200))
                         ventanaP.blit(img, (840, 240))
@@ -253,11 +244,11 @@ def main():
 
 
                     # print "SelectedCop:"+str(cops[tmp].x)+":"+str(cops[tmp].y)
-                    #selecciona casilla a ubicarse y le entrega el coin
+                    # select the tile to place and give the coin
                     selTile = cops[tmp].coin.listMov[tmp2]
-                    if selTile.occupied == 2: #Si la posicion que tomara esta ocupada por ladron
+                    if selTile.occupied == 2: #if the position that is going to tak its occupied by a urglar
                         print "Atrapado"
-                        cops[tmp].coin.leftMov = 1 #Indica que le queda un movimiento (El que realizara)
+                        cops[tmp].coin.leftMov = 1 #set the movement to 1
                     selTile.setOccupied(1) #then move and set occupied by a cop
                     selTile.coin = cops[tmp].coin
                     selTile.coin.countDownMoves()
@@ -267,7 +258,7 @@ def main():
                     pygame.time.wait(666)
                 else:
                     numDado = 0
-                if numDado == 0: #Si policia usa todos sus movimientos, termina su turno o no tiene movimientos posibles
+                if numDado == 0: #if a cop uses all of its movements, end turn
                     turno = 1
                     throwed = 0
                     board.resetMovesByCoin(1)
