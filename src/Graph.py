@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 
 class CustomTree:
 
-	def __init__(self,root = None,leafs =[]):
+	def __init__(self,root = None,leafs =[], filen = None):
 		#Variable that contains the tree levels
 		self.levels = [{'root':root,'leafs':leafs}]
 		self.Graph = self.newGraph(root,leafs)
+		self.filen=filen
 	
 	def newGraph(self,root = None,leafs =[]):
 		G = nx.DiGraph()
@@ -25,7 +26,7 @@ class CustomTree:
 		for level in self.levels:
 			A.add_subgraph(level,rank='same')
 
-		A.draw('example.png', prog='dot')
+		A.draw(self.filen, prog='dot')
 
 
 root = "[0,0]"

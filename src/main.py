@@ -24,6 +24,8 @@ def main():
     turno = -1  #zero if cop, one if burglar
     throwed = 0
     numDado = 0
+    pequeno=0
+    levels=[]
     white = (255, 64, 64)
     fuente1 = pygame.font.SysFont(None, 20, False, True)
     textPolice = fuente1.render("Cops: ", 0, (0, 255, 0))
@@ -41,7 +43,7 @@ def main():
     board.llenarCasillas()
 
     #screen = pygame.display.set_mode((600,600))
-    ventanaP = pygame.display.set_mode((950, 460))  # x,y (Tablero 330, 460)
+    ventanaP = pygame.display.set_mode((1300, 460))  # x,y (Tablero 330, 460)
       # tablero = pygame.image.load("mena.jpg")
     pygame.display.set_caption("Cops and Burglars")
     xIni = 0
@@ -70,6 +72,18 @@ def main():
         xIni = 0
         yIni = 0
         for evento in pygame.event.get():
+
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_SPACE:
+                    if pequeno==0:
+                        ventanaP = pygame.display.set_mode((420, 460))
+                        pygame.display.update()
+                        pequeno=1
+                    else:
+                        ventanaP = pygame.display.set_mode((1300, 460))
+                        pygame.display.update()
+                        pequeno=0
+
             if evento.type == QUIT:
                 pygame.quit()
                 sys.exit()
@@ -187,25 +201,54 @@ def main():
                                 tmp = i
                                 tmp2 = j
                                 tam = cops[i].coin.countListMov[j]
-                                root = "["+str(cops[i].x)+","+str(cops[i].y)+"]"
-                                taml=len(board.getNeighborsList(cops[i].x, cops[i].y))
-                                listnei=board.getNeighborsList(cops[i].x, cops[i].y)
-                                levels = ["[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]"]
-                                for k in range(len(listnei)):
-                                    levels[k] = "["+str(listnei[k].x)+","+str(listnei[k].y)+"]"
 
-                                a = Graph.CustomTree(root = root,leafs=levels)
-                                #a.addLevels(root = "[2,3]",leafs=["[5,6]","[7,8]"])
-                                a.draw()
-                                filename = "example.png" # ensure filename is correct
-                                img=pygame.image.load(filename)
-                                img = pygame.transform.scale(img, (500,150))
-                                ventanaP.blit(img, (420, 20))
 
                                 #ventanaP.blit(img, (400,460))
                                 #pygame.display.update()
                                 #fps.tick(100)
                                 #pygame.display.flip()
+
+                        root = "["+str(cops[i].x)+","+str(cops[i].y)+"]"
+                        listnei=board.getNeighborsList(cops[i].x, cops[i].y)
+
+                        for k in range(len(listnei)):
+                            levels.append("["+str(listnei[k].x)+","+str(listnei[k].y)+"]")
+                            #levels[k] =
+                        print "--------------------------------------------"
+
+                        #only for veryfing the printing
+                        print "for police in"+root
+                        for k in range(len(listnei)):
+                            print levels[k]
+
+                        filename = "example"+str(i)+".png" # ensure filename is correct
+
+                        a = Graph.CustomTree(root = root,leafs=levels, filen=filename)
+                        #a.addLevels(root = root,leafs=levels)
+                        a.draw()
+
+                        print len(levels)
+                        print levels
+                        for t in range(len(levels)):
+                            print "hola"
+                            levels.pop(0)
+                            print levels
+
+
+
+
+                        img=pygame.image.load("example0.png")
+                        img = pygame.transform.scale(img, (400,200))
+                        ventanaP.blit(img, (420, 20))
+                        img=pygame.image.load("example1.png")
+                        img = pygame.transform.scale(img, (400,200))
+                        ventanaP.blit(img, (420, 240))
+                        img=pygame.image.load("example2.png")
+                        img = pygame.transform.scale(img, (400,200))
+                        ventanaP.blit(img, (840, 20))
+                        img=pygame.image.load("example3.png")
+                        img = pygame.transform.scale(img, (400,200))
+                        ventanaP.blit(img, (840, 240))
 
 
 
