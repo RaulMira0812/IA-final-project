@@ -1,5 +1,6 @@
 #import Burglar
 import pygame
+import Graph
 from PathFinding import Node,PathFinding
 
 class Cop():

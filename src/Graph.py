@@ -31,10 +31,10 @@ class CustomTree:
 root = "[0,0]"
 levels = ["[1,1]","[2,3]","[3,4]"]
 
-a = CustomTree(root = root,leafs=levels)
-a.addLevels(root = "[2,3]",leafs=["[5,6]","[7,8]"])
-a.addLevels(root = "[7,8]",leafs=["[9,10]","[11,12]","[3,44]"])
-a.draw()
+# = CustomTree(root = root,leafs=levels)
+#a.addLevels(root = "[2,3]",leafs=["[5,6]","[7,8]"])
+#a.addLevels(root = "[7,8]",leafs=["[9,10]","[11,12]","[3,44]"])
+#a.draw()
 
 """G.add_edge('a','ab')
 G.add_edge('a','bbc')

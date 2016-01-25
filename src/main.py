@@ -1,8 +1,11 @@
+#!/usr/bin/env python
 import pygame
 import sys
 import Board
 import random
 import Dice
+import Graph
+import Image
 from PathFinding import Node,PathFinding
 from pygame.locals import *
 
@@ -21,6 +24,7 @@ def main():
     turno = -1  #zero if cop, one if burglar
     throwed = 0
     numDado = 0
+    white = (255, 64, 64)
     fuente1 = pygame.font.SysFont(None, 20, False, True)
     textPolice = fuente1.render("Cops: ", 0, (0, 255, 0))
     textBurglar = fuente1.render("Burglars: ", 0, (0, 255, 0))
@@ -35,7 +39,9 @@ def main():
     board.loadBoard()
 
     board.llenarCasillas()
-    ventanaP = pygame.display.set_mode((420, 460))  # x,y (Tablero 330, 460)
+
+    #screen = pygame.display.set_mode((600,600))
+    ventanaP = pygame.display.set_mode((950, 460))  # x,y (Tablero 330, 460)
       # tablero = pygame.image.load("mena.jpg")
     pygame.display.set_caption("Cops and Burglars")
     xIni = 0
@@ -168,15 +174,41 @@ def main():
                 tmp2 = 0
                 tam = 100
                 cops = board.selectAllPolices() #get the list of polices in the board com movimientos disponibles
+
+
+
+
                 if len(cops) != 0:
                     for i in range(len(cops)): #for each cop on the board
                         cops[i].coin.setListMov(board.getNeighborsList(cops[i].x, cops[i].y), board) #set the neighbors
-                    for i in range(len(cops)): # Se selecciona al mejor policia para realizar movimiento
+                    for i in range(len(cops)): # The best police is selected for the movement
                         for j in range(len(cops[i].coin.countListMov)):
                             if tam > cops[i].coin.countListMov[j]:
                                 tmp = i
                                 tmp2 = j
                                 tam = cops[i].coin.countListMov[j]
+                                root = "["+str(cops[i].x)+","+str(cops[i].y)+"]"
+                                taml=len(board.getNeighborsList(cops[i].x, cops[i].y))
+                                listnei=board.getNeighborsList(cops[i].x, cops[i].y)
+                                levels = ["[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]","[0,0]"]
+                                for k in range(len(listnei)):
+                                    levels[k] = "["+str(listnei[k].x)+","+str(listnei[k].y)+"]"
+
+                                a = Graph.CustomTree(root = root,leafs=levels)
+                                #a.addLevels(root = "[2,3]",leafs=["[5,6]","[7,8]"])
+                                a.draw()
+                                filename = "example.png" # ensure filename is correct
+                                img=pygame.image.load(filename)
+                                img = pygame.transform.scale(img, (500,150))
+                                ventanaP.blit(img, (420, 20))
+
+                                #ventanaP.blit(img, (400,460))
+                                #pygame.display.update()
+                                #fps.tick(100)
+                                #pygame.display.flip()
+
+
+
                     # print "SelectedCop:"+str(cops[tmp].x)+":"+str(cops[tmp].y)
                     #selecciona casilla a ubicarse y le entrega el coin
                     selTile = cops[tmp].coin.listMov[tmp2]
